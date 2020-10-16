@@ -13,7 +13,7 @@ type Props = {
   description?: string
 }
 
-const Layout = ({ children, title = 'Food?', description='Does your food contain known carcinogens ?' }: Props) =>{
+const Layout = ({ children, title = 'Is My Food Harmful?', description='Does your food contain known carcinogens ?' }: Props) =>{
   return(
     <div>
       <Head>
@@ -33,7 +33,7 @@ const Layout = ({ children, title = 'Food?', description='Does your food contain
 
       <footer>
         <hr/>
-        <FaRegCopyright />
+        <FaRegCopyright /> Alexander Benko
       </footer>
     </div>
   )
