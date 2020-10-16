@@ -28,7 +28,7 @@ def createDictionaryFile():
       output['sweeteners'][key_values2[0].lower()] = key_values2[1]
 
     with open('result.json', 'w') as fp:
-      json.dump(output, fp)
+      json.dump(output, fp,indent=4)
 
     print(output)
 
