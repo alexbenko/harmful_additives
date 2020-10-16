@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "dict":"python3 create.py"
   },
   "dependencies": {
     "next": "9.5.5",
