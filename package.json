@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "dict": "cd data && python3 create.py",
+    "dict": "cd data && python3 create.py"
 
   },
   "dependencies": {
