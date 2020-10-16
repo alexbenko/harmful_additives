@@ -6,9 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "dict":"python3 create.py"
+    "dict": "cd data && python3 create.py",
+
   },
   "dependencies": {
+    "axios": "^0.20.0",
     "next": "9.5.5",
     "react": "16.14.0",
     "react-dom": "16.14.0",
