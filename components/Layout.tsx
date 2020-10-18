@@ -28,7 +28,7 @@ const Layout = ({ children, title = 'Is My Food Harmful?', description='Does you
 
       {children}
 
-      <footer>
+      <footer style={{position:'fixed',bottom:'0',width:'100%'}}>
         <hr/>
         <FaRegCopyright /> Alexander Benko
       </footer>
