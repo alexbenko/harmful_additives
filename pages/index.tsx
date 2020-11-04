@@ -26,7 +26,9 @@ const IndexPage = () => {
   const [searches,setSearches] = useState([]);
   const [showResults,setShowResults] = useState(false);
   const [results,setResults] = useState({});
-  const windowSize = useWindowSize()
+  const windowSize = useWindowSize();
+
+  console.log(windowSize)
 
   const handleEnter = (e:any):void =>{
     e.preventDefault();
