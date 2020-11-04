@@ -2,6 +2,8 @@ import axios from 'axios';
 import { useState } from 'react';
 import Term from '../components/Term';
 import Results from '../components/Results';
+import useWindowSize from '../hooks/useWindowSize';
+
 
 const generateSearchQuery = async (word:string):Promise<string> =>{
   let output = ''
@@ -24,6 +26,7 @@ const IndexPage = () => {
   const [searches,setSearches] = useState([]);
   const [showResults,setShowResults] = useState(false);
   const [results,setResults] = useState({});
+  const windowSize = useWindowSize()
 
   const handleEnter = (e:any):void =>{
     e.preventDefault();
