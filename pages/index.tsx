@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import Term from '../components/Term';
+import Results from '../components/Results';
 
 const generateSearchQuery = async (word:string):Promise<string> =>{
   let output = ''
@@ -21,13 +22,19 @@ const goToSearch = async (search:string = 'agave nectar') =>{
 const IndexPage = () => {
   const [search,setSearch] = useState('');
   const [searches,setSearches] = useState([]);
+  const [showResults,setShowResults] = useState(false);
   const [results,setResults] = useState({});
 
   const handleEnter = (e:any):void =>{
     e.preventDefault();
 
+    //little input validation
     if(search.length < 3){
       alert('Please Enter At Least 3 letters...')
+      return
+    } else if(search.includes("/>") || search.includes("<")){
+      alert('Nice try 😡');
+      setSearch('')
       return
     }
 
@@ -53,7 +60,7 @@ const IndexPage = () => {
     }
   };
 
-  const handleSubmit = (e:any)=>{
+  const handleSubmit = (e:any):void=>{
     if(searches.length === 0){
       alert('Please enter at least one search...')
       return
@@ -63,7 +70,9 @@ const IndexPage = () => {
     let copy = [...searches];
     axios.get('/api/analyze',{params:{copy}})
     .then((response)=>{
-      console.log(response.data)
+      console.log('Response: ',response.data)
+      setResults(response.data)
+      setShowResults(!showResults)
     })
     .catch((err)=>{
       console.error(err)
@@ -87,7 +96,6 @@ const IndexPage = () => {
         </form>
 
         <button onClick={(e)=>handleSubmit(e)}>Submit</button>
-
       </div>
 
       <div className="current-searches" >
@@ -95,6 +103,11 @@ const IndexPage = () => {
         {searches.map((term,i)=><Term key={i} term={term} remove={handleDelete}/>)}
       </div>
 
+
+
+      <div>
+
+      </div>
     </div>
   )
 }
