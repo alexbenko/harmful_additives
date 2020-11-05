@@ -4,23 +4,6 @@ import Term from '../components/Term';
 import Results from '../components/Results';
 import useWindowSize from '../hooks/useWindowSize';
 
-
-const generateSearchQuery = async (word:string):Promise<string> =>{
-  let output = ''
-  let term = word.split(' ');
-
-  term.map((word)=> output = output + '+' + word)
-  return Promise.resolve(output)
-};
-
-const goToSearch = async (search:string = 'agave nectar') =>{
-  let query = await generateSearchQuery(search)
-
-  window.open(`https://google.com/search?q=${query}+bad+for+you`)
-};
-
-
-
 const IndexPage = () => {
   const [search,setSearch] = useState('');
   const [searches,setSearches] = useState([]);
@@ -103,9 +86,13 @@ const IndexPage = () => {
         <button onClick={(e)=>handleSubmit(e)}>Submit</button>
       </div>
 
-      <div className="current-searches" >
+      <div className="current-searches" style={{borderStyle: 'solid'}}>
         <h3>Current Search Terms:</h3>
         {searches.map((term,i)=><Term key={i} term={term} remove={handleDelete}/>)}
+      </div>
+
+      <div className="search_results">
+        {showResults ? <Results detected={results}/>: ''}
       </div>
 
 
