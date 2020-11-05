@@ -104,3 +104,6 @@ dist
 .tern-port
 
 *.txt
+
+data/result.json
+data/result.ts
