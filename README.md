@@ -13,9 +13,7 @@ This project was made with [Next.js](https://nextjs.org/).
 <br />
 
 <ol>
-  <h2> A list of all features I currently want to be implemented into the project </h2>
   <br/>
   <li>Reformat the harmful additive data so there is a way to easily compare user's search to my data</li>
   <li> Refractor the analyze function in the api so it uses Promise.all to speed up the request </li>
-
 </ol>
