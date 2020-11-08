@@ -1,4 +1,5 @@
 import json
+import fileinput
 
 def createDictionaryFile():
     output = {}
@@ -11,7 +12,7 @@ def createDictionaryFile():
     with open('color.txt','r') as f:
       colors = [line.rstrip('\n') for line in f]
 
-    output['misc']     = {}
+    output['misc']       = {}
     output['colors']     = {}
     output['sweeteners'] = {}
 
@@ -30,10 +31,35 @@ def createDictionaryFile():
       cleaned_key_sweeteners = "".join(key_values_sweeteners[0].lower().split())
       output['sweeteners'][cleaned_key_sweeteners] = key_values_sweeteners[1]
 
-    with open('result.json', 'w') as fp:
-      json.dump(output, fp,indent=2)
+    #with open('result.json', 'w') as fp:
+      #json.dump(output, fp,indent=2)
+    with open('result.ts','a') as file:
+      file.write('const dictionary = ')
 
-    print(output)
+    with open('result.ts','a') as fp:
+      fp.write(f"""
+        {json.dump(output,fp,indent=2)}
+      """.strip())
+
+    with open('result.ts','a') as file:
+      file.write("""
+      \n
+      \n
+        export default dictionary;
+      """.strip())
+
+
+    #This codeblock removes a None that gets generated after dumping the JSON ##########
+    with open('result.ts', 'r') as file :
+      filedata = file.read()
+
+    filedata = filedata.replace('None', '\n ')
+
+    with open('result.ts', 'w') as file:
+      file.write(filedata)
+    ##################################################
+
+    print('Successfully Generated Typescript Export File ! 🥳')
 
 
 
