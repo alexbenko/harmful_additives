@@ -7,6 +7,7 @@ const analyze = async(terms) =>{
   //I: array containing strings of each ingredient to search for
   let detected:Detected = {misc:[],colors:[],sweeteners:[],unknown:[]};
 
+  //TODO: refractor this using Promise.all
   terms.map((term:string):void=>{
     if(term in dictionary["misc"]) {
       console.log(dictionary["misc"][term])
