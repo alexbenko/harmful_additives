@@ -50,7 +50,7 @@ const IndexPage = () => {
     }
   };
 
-  const handleSubmit = (e:any):void=>{
+  const handleSubmit = async (e:any):Promise<void>=>{
     if(searches.length === 0){
       alert('Please enter at least one search...')
       return
@@ -59,24 +59,24 @@ const IndexPage = () => {
     e.preventDefault();
     setLoading(true);
     let copy = [...searches];
-    axios.get('/api/analyze',{params:{copy}})
-    .then((response)=>{
-      console.log('Response: ',response.data)
-      setResults(response.data)
+
+    try{
+      let results = await axios.get('/api/analyze',{params:{copy}})
+      console.log(results)
+      setResults(results.data)
       setShowResults(!showResults)
-    })
-    .catch((err)=>{
+    }catch(err){
       console.error(err)
-    })
+    }
 
   };
 
   useEffect(()=>{
-    console.log("Results Go updated, no longer loading...")
+    console.log("Results Got updated, no longer loading...")
     setTimeout(()=>{
       setLoading(false)
     },1000)
-  },[results])
+  },[showResults,results])
 
   return(
     <div className="index">
@@ -108,7 +108,7 @@ const IndexPage = () => {
 
       {showResults && !loading &&
         <div className="search_results">
-          <Results detected={results}/>
+          <Results detected={results.results}/>
         </div>
       }
 
