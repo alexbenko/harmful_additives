@@ -11,8 +11,6 @@ const IndexPage = () => {
   const [results,setResults] = useState({});
   const windowSize = useWindowSize();
 
-  console.log(windowSize)
-
   const handleEnter = (e:any):void =>{
     e.preventDefault();
 
@@ -91,9 +89,11 @@ const IndexPage = () => {
         {searches.map((term,i)=><Term key={i} term={term} remove={handleDelete}/>)}
       </div>
 
-      <div className="search_results">
-        {showResults ? <Results detected={results}/>: ''}
-      </div>
+      {showResults &&
+        <div className="search_results">
+          <Results detected={results}/>
+        </div>
+      }
 
 
 
