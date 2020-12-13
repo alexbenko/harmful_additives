@@ -13,16 +13,13 @@ const analyze = async(terms):Promise<any> =>{
     })
   );
 
-
-
-  //TODO: refractor this using Promise.all
-  sanitzed.map((term:string):void=>{
+  sanitzed.map((term:string,i):void=>{
     if(term in dictionary["misc"]) {
-      detected.misc.push({title:term,why: dictionary["misc"][term]})
+      detected.misc.push({title:terms[i],why: dictionary["misc"][term]})
     } else if(term in dictionary["colors"]){
-      detected.colors.push({title:term,why: dictionary["colors"][term]})
+      detected.colors.push({title:terms[i],why: dictionary["colors"][term]})
     } else if(term in dictionary["sweeteners"]){
-      detected.sweeteners.push({title:term,why: dictionary["sweeteners"][term]})
+      detected.sweeteners.push({title:terms[i],why: dictionary["sweeteners"][term]})
     } else {
       detected.unknown.push(term)
     }
