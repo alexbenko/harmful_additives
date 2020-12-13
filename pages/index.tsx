@@ -64,7 +64,7 @@ const IndexPage = () => {
       let results = await axios.get('/api/analyze',{params:{copy}})
       console.log(results)
       setResults(results.data)
-      setShowResults(!showResults)
+      setShowResults(true)
     }catch(err){
       console.error(err)
     }
