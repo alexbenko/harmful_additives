@@ -1,14 +1,18 @@
 import axios from 'axios';
-import { useState } from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+import { useState,useEffect } from 'react';
 import Term from '../components/Term';
 import Results from '../components/Results';
 import useWindowSize from '../hooks/useWindowSize';
+
 
 const IndexPage = () => {
   const [search,setSearch] = useState('');
   const [searches,setSearches] = useState([]);
   const [showResults,setShowResults] = useState(false);
   const [results,setResults] = useState({});
+  const [loading,setLoading] = useState(false);
   const windowSize = useWindowSize();
 
   const handleEnter = (e:any):void =>{
@@ -53,6 +57,7 @@ const IndexPage = () => {
     };
 
     e.preventDefault();
+    setLoading(true);
     let copy = [...searches];
     axios.get('/api/analyze',{params:{copy}})
     .then((response)=>{
@@ -64,7 +69,14 @@ const IndexPage = () => {
       console.error(err)
     })
 
-  }
+  };
+
+  useEffect(()=>{
+    console.log("Results Go updated, no longer loading...")
+    setTimeout(()=>{
+      setLoading(false)
+    },1000)
+  },[results])
 
   return(
     <div className="index">
@@ -89,7 +101,12 @@ const IndexPage = () => {
         {searches.map((term,i)=><Term key={i} term={term} remove={handleDelete}/>)}
       </div>
 
-      {showResults &&
+      {loading &&
+
+        <CircularProgress />
+      }
+
+      {showResults && !loading &&
         <div className="search_results">
           <Results detected={results}/>
         </div>
