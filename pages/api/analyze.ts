@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { Detected } from '../../interfaces';
 import { type } from 'os';
 
-const analyze = async(terms):Promise<any> =>{
+const analyze = async(terms):Promise<object> =>{
   console.log(typeof terms)
   //O: object containing all detected harmful ingredients
   //I: array containing strings of each ingredient to search for
@@ -51,7 +51,7 @@ const handler = async(req: NextApiRequest, res: NextApiResponse) => {
   try {
     const response = {
       userSearches: req.query['copy[]'],
-      results:[]
+      results:{}
     };
 
     let results = await analyze(req.query['copy[]'])
