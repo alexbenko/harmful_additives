@@ -1,6 +1,5 @@
-import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import toast from 'react-hot-toast';
 import { useState,useEffect } from 'react';
 import Term from '../components/Term';
 import Results from '../components/Results';
@@ -20,10 +19,10 @@ const IndexPage = () => {
 
     //little input validation
     if(search.length < 3){
-      alert('Please Enter At Least 3 letters...')
+      toast.error('Please Enter At Least 3 letters...')
       return
     } else if(search.includes("/>") || search.includes("<")){
-      alert('Nice try 😡');
+      toast.error('Nice try 😡');
       setSearch('')
       return
     }
@@ -31,6 +30,7 @@ const IndexPage = () => {
     try{
       //push curent search into searches array
       setSearches(prevArray => [...prevArray, search])
+      toast.success('Added Successfully !')
     } catch(err){
       console.error('Error Adding Search: ',err)
     } finally {
@@ -47,7 +47,9 @@ const IndexPage = () => {
     //remove it from array
     try{
       copiedState.splice(idx,1)
+      toast.success(`Successfully Deleted: ${toDelete} from search.`)
     } catch(err) {
+      toast.error('Error Deleting Search, Please Try Again.')
       console.log('Error Tyring to Delete: ',err)
     } finally {
       setSearches(copiedState)
@@ -56,7 +58,7 @@ const IndexPage = () => {
 
   const handleSubmit = async (e:any):Promise<void>=>{
     if(searches.length === 0){
-      alert('Please enter at least one search...')
+      toast('Please enter at least one search...')
       return
     };
 
@@ -74,6 +76,7 @@ const IndexPage = () => {
       setResults(parsed)
       setShowResults(true)
     }catch(err){
+      toast.error('Netowork Error,Please Check your connection or refresh the page.')
       console.error(err)
     }
 
@@ -85,6 +88,7 @@ const IndexPage = () => {
       setLoading(false)
     },1000)
   },[showResults,results])
+
 
   return(
     <div className="index">
@@ -121,10 +125,6 @@ const IndexPage = () => {
       }
 
 
-
-      <div>
-
-      </div>
     </div>
   )
 }
