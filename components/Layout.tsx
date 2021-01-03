@@ -3,8 +3,8 @@
 
 import React, { ReactNode } from 'react'
 //import Link from 'next/link'
-import Head from 'next/head'
-
+import Head from 'next/head';
+import { Toaster } from 'react-hot-toast';
 import { FaRegCopyright } from 'react-icons/fa';
 
 type Props = {
@@ -25,13 +25,40 @@ const Layout = ({ children, title = 'Is My Food Harmful?', description='Does you
         <meta name="og:description" content={description}/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       </Head>
-
       {children}
-
       <footer style={{position:'fixed',bottom:'0',width:'100%'}}>
         <hr/>
         <FaRegCopyright /> Alexander Benko
       </footer>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          // Define default options
+          style: {
+            margin: '40px',
+            background: '#363636',
+            color: '#fff',
+            zIndex: 1,
+          },
+          duration: 5000,
+          // Default options for specific types
+          success: {
+            duration: 3000,
+            theme: {
+              primary: 'green',
+              secondary: 'black',
+            },
+          },
+          error:{
+            duration:3000,
+            theme:{
+              primary:'red',
+              secondary:'black'
+            }
+          }
+        }}
+      />
     </>
   )
 }
