@@ -15,7 +15,7 @@ type Props = {
 
 const Layout = ({ children, title = 'Is My Food Harmful?', description='Does your food contain known carcinogens ?' }: Props) =>{
   return(
-    <div>
+    <>
       <Head>
         <title>{title}</title>
         <link rel="shortcut icon" href="/tab.ico" />
@@ -32,7 +32,7 @@ const Layout = ({ children, title = 'Is My Food Harmful?', description='Does you
         <hr/>
         <FaRegCopyright /> Alexander Benko
       </footer>
-    </div>
+    </>
   )
 }
 
