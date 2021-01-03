@@ -11,7 +11,7 @@ const IndexPage = () => {
   const [search,setSearch] = useState('');
   const [searches,setSearches] = useState([]);
   const [showResults,setShowResults] = useState(false);
-  const [results,setResults] = useState({});
+  const [results,setResults] = useState({results:''});
   const [loading,setLoading] = useState(false);
   const windowSize = useWindowSize();
 
@@ -31,6 +31,8 @@ const IndexPage = () => {
     try{
       //push curent search into searches array
       setSearches(prevArray => [...prevArray, search])
+    } catch(err){
+      console.error('Error Adding Search: ',err)
     } finally {
       //clear search so user can search a new one
       setSearch('')
@@ -45,7 +47,9 @@ const IndexPage = () => {
     //remove it from array
     try{
       copiedState.splice(idx,1)
-    } finally{
+    } catch(err) {
+      console.log('Error Tyring to Delete: ',err)
+    } finally {
       setSearches(copiedState)
     }
   };
@@ -61,9 +65,13 @@ const IndexPage = () => {
     let copy = [...searches];
 
     try{
-      let results = await axios.get('/api/analyze',{params:{copy}})
-      console.log(results)
-      setResults(results.data)
+      let results = await fetch('/api/analyze',{
+        method: 'PUT',
+        body: copy
+      })
+      let parsed = await results.json()
+      console.log(parsed)
+      setResults(parsed)
       setShowResults(true)
     }catch(err){
       console.error(err)
