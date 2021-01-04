@@ -1,9 +1,6 @@
 import Individual from '../components/Individual';
 
 const ResultCard = ({ header , subtitle , results})=>{
-  if(results.length === 0){
-    return null
-  } else {
     return(
       <div className={`${header}-card`} style={{display:'flext',flexDirection:'column'}}>
         <div className="card-header">
@@ -16,7 +13,6 @@ const ResultCard = ({ header , subtitle , results})=>{
         </div>
       </div>
     )
-  }
 }
 
 export default ResultCard
