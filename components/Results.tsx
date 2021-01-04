@@ -1,14 +1,29 @@
 import { Detected } from '../interfaces';
-import Individual from '../components/Individual';
+import Individual from './Individual';
+import ResultCard from './ResultCard'
 import { Result } from '../interfaces'
 
 const Results = ({detected} )=>{
+  console.log('Detected: ',detected)
   return(
     <div className="results-container">
+      <ResultCard
+        header={'Artificial Sweeteners'}
+        subtitle={''}
+        results={detected.sweeteners}
+      />
 
-      <div className="misc-contianer" style={{borderStyle: 'solid'}}>
-        {detected.misc.map((item: Result, i:number )=><Individual key={i} title={item.title} description={item.why}/>)}
-      </div>
+      <ResultCard
+        header={'Artificial Coloring'}
+        subtitle={''}
+        results={detected.colors}
+      />
+
+      <ResultCard
+        header={'Miscellaneous'}
+        subtitle={'A list of other harmful ingredients found in your food'}
+        results={detected.misc}
+      />
     </div>
   )
 }
