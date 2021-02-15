@@ -1,7 +1,8 @@
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles } from '@material-ui/core/styles';
 import toast from 'react-hot-toast';
 import { useState,useEffect } from 'react';
-import Term from '../components/Term';
+import UserSearch from '../components/UserSearch';
 import Results from '../components/Results';
 import useWindowSize from '../hooks/useWindowSize';
 
@@ -12,7 +13,7 @@ const IndexPage = () => {
   const [showResults,setShowResults] = useState(false);
   const [results,setResults] = useState({results:''});
   const [loading,setLoading] = useState(false);
-  const windowSize = useWindowSize();
+  //const windowSize = useWindowSize();
 
   const handleEnter = (e:any):void =>{
     e.preventDefault();
@@ -65,11 +66,10 @@ const IndexPage = () => {
     e.preventDefault();
     setLoading(true);
     let copy = [...searches];
-
     try{
       let results = await fetch('/api/analyze',{
         method: 'PUT',
-        body: copy
+        body: JSON.stringify(copy)
       })
       let parsed = await results.json()
       console.log(parsed)
@@ -110,7 +110,7 @@ const IndexPage = () => {
 
       <div className="current-searches" style={{borderStyle: 'solid'}}>
         <h3>Current Search Terms:</h3>
-        {searches.map((term,i)=><Term key={i} term={term} remove={handleDelete}/>)}
+        {searches.map((term,i)=><UserSearch key={i} term={term} remove={handleDelete}/>)}
       </div>
 
       {loading &&

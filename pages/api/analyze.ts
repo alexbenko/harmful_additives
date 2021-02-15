@@ -1,7 +1,6 @@
 import dictionary from '../../data/result'
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Detected } from '../../interfaces';
-import { type } from 'os';
 
 const analyze = async(terms):Promise<object> =>{
   //O: object containing all detected harmful ingredients
@@ -47,14 +46,14 @@ const analyze = async(terms):Promise<object> =>{
 
 
 const handler = async(req: NextApiRequest, res: NextApiResponse) => {
-  console.log(req.body)
+  const parsed = JSON.parse(req.body)
   try {
     const response = {
-      userSearches: req.body,
+      userSearches: parsed,
       results:{}
     };
-    response.results = await analyze(req.body)
-    console.log(response.results)
+    response.results = await analyze(parsed)
+    console.log('Results: ',response.results)
     res.status(200).send(response)
   } catch (err) {
     console.error(err)
