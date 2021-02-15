@@ -7,7 +7,7 @@ type TermCon = {
 
 const Term = ({remove,term}:TermCon) =>{
   return(
-    <div className={`${name}-container`} style={{display:'flex',flexDirection:'row'}}>
+    <div className={`${term}-container`} style={{display:'flex',flexDirection:'row'}}>
       <p>{term}</p>
       <span style={{cursor:'pointer'}} onClick={()=>remove(term)}>&#10006;</span>
     </div>
