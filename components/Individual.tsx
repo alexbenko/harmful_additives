@@ -9,7 +9,7 @@ const generateSearchQuery = async (word:string):Promise<string> =>{
 const goToSearch = async (search:string = 'agave nectar') =>{
   let query = await generateSearchQuery(search)
 
-  window.open(`https://google.com/search?q=${query}+bad+for+you`)
+  window.open(`https://google.com/search?q=${query}`)
 };
 
 const Individual = ({title, description})=>{
