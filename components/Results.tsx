@@ -1,7 +1,6 @@
 import ResultCard from './ResultCard'
 
-const Results = ({detected} )=>{
-  console.log('Detected: ',detected)
+const Results = ({ detected })=>{
   return(
     <div className="results-container">
       <ResultCard
