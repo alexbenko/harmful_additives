@@ -12,7 +12,7 @@ const IndexPage = () => {
   const [search,setSearch] = useState('');
   const [searches,setSearches] = useState([]);
   const [showResults,setShowResults] = useState(false);
-  const [results,setResults] = useState({results:''});
+  const [results,setResults] = useState({results:{}});
   const [loading,setLoading] = useState(false);
   //const windowSize = useWindowSize();
 
@@ -85,9 +85,7 @@ const IndexPage = () => {
 
   useEffect(()=>{
     console.log("Results Got updated, no longer loading...")
-    setTimeout(()=>{
-      setLoading(false)
-    },1000)
+    setLoading(false)
   },[showResults,results])
 
 
