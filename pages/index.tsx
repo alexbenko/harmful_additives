@@ -1,5 +1,6 @@
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 import toast from 'react-hot-toast';
 import { useState,useEffect } from 'react';
 import UserSearch from '../components/UserSearch';
@@ -91,7 +92,8 @@ const IndexPage = () => {
 
 
   return(
-    <div className="index">
+    <Container maxWidth="sm">
+
       <div className="welcome-paragraph">
         <p>
 
@@ -125,7 +127,7 @@ const IndexPage = () => {
       }
 
 
-    </div>
+    </Container>
   )
 }
 
