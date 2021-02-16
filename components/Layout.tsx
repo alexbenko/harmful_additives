@@ -1,8 +1,5 @@
-//this will be the layout for the entire app proabably
-//will most likely start out as a single page app
-
-import React, { ReactNode } from 'react'
-//import Link from 'next/link'
+import React, { ReactNode } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Head from 'next/head';
 import { Toaster } from 'react-hot-toast';
 import { FaRegCopyright } from 'react-icons/fa';
@@ -12,23 +9,44 @@ type Props = {
   title?: string
   description?: string
 }
+const useStyles = makeStyles({
+  span: {
+    paddingRight:'10px'
+  },
+  footer: {
+    position:'fixed',
+    bottom:'0',
+    width:'100%'
+  }
+});
 
-const Layout = ({ children, title = 'Is My Food Harmful?', description='Does your food contain known carcinogens ?' }: Props) =>{
+const Layout = ({ children, title = 'What Is In my food?', description='Does your food contain known carcinogens ?' }: Props) =>{
+  const styles = useStyles();
+
   return(
     <>
       <Head>
         <title>{title}</title>
-        <link rel="shortcut icon" href="/tab.ico" />
+        <link rel="shortcut icon" href="/favicon.svg" />
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta name="og:keywords" content="Cancer, my food,is bad for me,cause cancer"/>
+        <meta name="og:keywords" content="Cancer, my food,is bad for me,cause cancer,what is in,my food,what is in my food,what is"/>
         <meta name="og:description" content={description}/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       </Head>
       {children}
-      <footer style={{position:'fixed',bottom:'0',width:'100%'}}>
+      <footer className={styles.footer}>
         <hr/>
-        <FaRegCopyright /> Alexander Benko
+        <span className={styles.span}>
+          <span className={styles.span}><FaRegCopyright/></span>{new Date().getFullYear()}
+        </span>
+        <span className={styles.span}>
+          Made By:
+          <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/alexander-benko-06b99a1a4/">
+            Alexander Benko
+          </a>
+        </span>
+
       </footer>
       <Toaster
         position="top-center"
