@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "dict": "cd data && python3 create.py"
+    "seed": "python3 data/create.py && node lib/seed.js"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.2",
