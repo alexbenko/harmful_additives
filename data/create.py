@@ -2,7 +2,7 @@ import json
 import fileinput
 
 def createDictionaryFile():
-    output = {}
+    output = []
     index = 0
     with open('misc.txt','r') as f:
       misc = [line.rstrip('\n') for line in f]
@@ -17,11 +17,11 @@ def createDictionaryFile():
       key_values = i.split(': ')
       cleaned_name = "".join(key_values[0].lower().split())
 
-      output[index] = {
+      output.append({
         "name": cleaned_name,
         "why": key_values[1],
         "category": "misc"
-      }
+      })
 
       index += 1
 
@@ -29,11 +29,11 @@ def createDictionaryFile():
       key_values_colors = i.split(': ')
       cleaned_name = "".join(key_values_colors[0].lower().split())
 
-      output[index] = {
+      output.append({
         "name": cleaned_name,
         "why": key_values_colors[1],
         "category": "colors"
-      }
+      })
 
       index += 1
 
@@ -41,11 +41,11 @@ def createDictionaryFile():
       key_values_sweeteners = i.split(': ')
       cleaned_name = "".join(key_values_sweeteners[0].lower().split())
 
-      output[index] = {
+      output.append({
         "name": cleaned_name,
         "why": key_values_sweeteners[1],
         "category": "sweeteners"
-      }
+      })
 
       index += 1
 
