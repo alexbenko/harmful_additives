@@ -1,7 +1,4 @@
-import { Detected } from '../interfaces';
-import Individual from './Individual';
 import ResultCard from './ResultCard'
-import { Result } from '../interfaces'
 
 const Results = ({detected} )=>{
   console.log('Detected: ',detected)
