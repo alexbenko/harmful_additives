@@ -52,28 +52,6 @@ def createDictionaryFile():
 
     with open('result.json', 'w') as fp:
       json.dump(output, fp,indent=2)
-    #with open('result.ts','a') as file:
-      #file.write('const dictionary = ')
-
-    #with open('result.ts','a') as fp:
-      #fp.write(f"""
-        #{json.dump(output,fp,indent=2)}
-      #""".strip())
-
-    #with open('result.ts','a') as file:
-      #file.write("""
-      #\n
-      #\n
-        #export default dictionary;
-      #""".strip())
-
-    #with open('result.ts', 'r') as file :
-      #filedata = file.read()
-
-    #filedata = filedata.replace('None', '\n ')
-
-    #with open('result.ts', 'w') as file:
-      #file.write(filedata)
 
     print('Successfully Generated Typescript Export File ! 🥳')
 
