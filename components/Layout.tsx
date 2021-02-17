@@ -35,7 +35,7 @@ const Layout = ({ children, title = 'What Is In my food?', description='Does you
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       </Head>
       {children}
-      <footer className={styles.footer}>
+      <footer className={styles.footer} style={{position:'fixed',bottom:'0',width:'100%'}}>
         <hr/>
         <span className={styles.span}>
           <span className={styles.span}><FaRegCopyright/></span>{new Date().getFullYear()}
