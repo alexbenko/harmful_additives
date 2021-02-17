@@ -5,6 +5,8 @@ import CardActions from '@material-ui/core/CardActions';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Grid from '@material-ui/core/Grid';
 
 type TermCon = {
   remove: Function
@@ -13,10 +15,12 @@ type TermCon = {
 
 const useStyles = makeStyles({
   root: {
-    minWidth: 100,
+    minWidth: 75,
+    flex:'1 0 21%'
   },
   container: {
-    padding:'10px'
+    padding:'10px',//just so their is space in between each search
+
   },
   title: {
     fontSize: 14,
@@ -26,29 +30,24 @@ const useStyles = makeStyles({
   },
 });
 
-const Term = ({remove,term}:TermCon) =>{
+const UserSearch = ({remove,term}:TermCon) =>{
   const styles = useStyles();
   return(
-    <div className={styles.container}>
+    <Grid item xs={3}>
+
       <Card className={styles.root}>
         <CardContent>
-          <Typography className={styles.title} color="textSecondary" gutterBottom>
+          <Typography className={styles.title} color="inherit" gutterBottom noWrap>
             {term}
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={()=>remove(term)}>&#128465;</Button>
+          <Button size="small" onClick={()=>remove(term)}><DeleteIcon/></Button>
         </CardActions>
       </Card>
-    </div>
+
+    </Grid>
   )
 };
 
-export default Term
-
-/*
-    <div className={`${term}-container`} style={{display:'flex',flexDirection:'row',justifyContent:'space-evenly'}}>
-      <p>{term}</p>
-      <span style={{cursor:'pointer'}} onClick={()=>remove(term)}>&#128465;</span>
-    </div>
-    */
+export default UserSearch;
