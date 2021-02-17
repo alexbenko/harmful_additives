@@ -11,9 +11,7 @@ const handler = async(req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const data = await search(parsed);
-    console.log('Data: ',data)
     response.results = data;
-    console.log('Response: ',response)
     res.status(200).send(response)
   } catch (err) {
     console.error(err)
