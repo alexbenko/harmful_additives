@@ -3,7 +3,6 @@ const uri = "mongodb+srv://alexbenko:phelps521@cluster0.nvy3b.mongodb.net/foodfi
 import { Detected } from '../interfaces'
 
 const search = async(searches:[string]):Promise<any>=>{
-  console.log("Searching...")
   const detected:Detected = {misc:[],colors:[],sweeteners:[],unknown:[]};
   const client = await new MongoClient.connect(uri, { useNewUrlParser: true,useUnifiedTopology:true });
 
@@ -22,7 +21,6 @@ const search = async(searches:[string]):Promise<any>=>{
           detected.unknown.push(term.name)
         }
       })
-      console.log(detected)
 
       return detected
 
