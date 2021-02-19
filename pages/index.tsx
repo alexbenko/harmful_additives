@@ -1,12 +1,48 @@
+// MUI imports
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+
+
+
+//other 3rd party imports
 import toast from 'react-hot-toast';
 import { useState,useEffect } from 'react';
+
+//Custom imports
 import UserSearch from '../components/UserSearch';
 import Results from '../components/Results';
 import useWindowSize from '../hooks/useWindowSize';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    paddingTop:'10px'
+  },
+  inputField: {
+    '& > *': {
+      margin: theme.spacing(1),
+      width: '30ch',
+      backgroundColor: 'white'
+    },
+  },
+  paper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexDirection:'column',
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    '& div':{
+      display:'flex',
+      flexDirection:'row'
+    }
+  },
+}));
 
 const IndexPage = () => {
   const [search,setSearch] = useState('');
@@ -49,7 +85,7 @@ const IndexPage = () => {
     //remove it from array
     try{
       copiedState.splice(idx,1)
-      toast.success(`Successfully Deleted: ${toDelete} from search.`)
+      toast.success(`Successfully deleted ${toDelete} from search.`)
     } catch(err) {
       toast.error('Error Deleting Search, Please Try Again.')
       console.log('Error Tyring to Delete: ',err)
@@ -88,43 +124,58 @@ const IndexPage = () => {
     setLoading(false)
   },[showResults,results])
 
-
+  const styles = useStyles();
   return(
-    <Container maxWidth="sm">
+    <Container maxWidth="lg">
+      <div className={styles.root}>
+        <Grid container spacing={3}>
 
-      <div className="welcome-paragraph">
-        <p>
+          <Grid item xs={12}>
+            <Paper className={styles.paper}>
 
-        </p>
+              <form className={styles.inputField} noValidate autoComplete="off" onSubmit={(e)=>handleEnter(e)}>
+                <input type="submit" style={{display: "none"}} />
+                <TextField
+                  id="filled-basic" color="secondary" value={search} label="Search For Ingredient Here" onChange={(e)=>setSearch(e.target.value)}
+                />
+              </form>
+
+            </Paper>
+          </Grid>
+
+          <Grid item xs={12} zeroMinWidth>
+            <Paper className={styles.paper}>
+
+                <h3 style={{padding:'5px'}}>Current Search Terms</h3>
+
+
+              <Grid container spacing={3}>
+                {searches.map((term,i)=><UserSearch key={i} term={term} remove={handleDelete}/>)}
+              </Grid>
+
+              { searches.length > 0 &&
+                <Button  onClick={(e)=>handleSubmit(e)} variant="contained">Submit</Button>
+              }
+            </Paper>
+
+          </Grid>
+
+        </Grid>
+
+
+        {loading &&
+
+          <CircularProgress />
+        }
+
+        {showResults && !loading &&
+          <div className="search_results">
+            <Results detected={results.results}/>
+          </div>
+        }
+
+
       </div>
-
-      <div className="forms">
-        <p>Type the names of ingredients you want to search and hit Enter to add them</p>
-        <form onSubmit={(e)=>handleEnter(e)}>
-          <input type="submit" style={{display: "none"}} />
-          <input type="text" value={search} style={{ padding: '10px'}} onChange={(e)=>setSearch(e.target.value)}/>
-        </form>
-
-        <button onClick={(e)=>handleSubmit(e)}>Submit</button>
-      </div>
-
-      <div className="current-searches" style={{borderStyle: 'solid'}}>
-        <h3>Current Search Terms:</h3>
-        {searches.map((term,i)=><UserSearch key={i} term={term} remove={handleDelete}/>)}
-      </div>
-
-      {loading &&
-
-        <CircularProgress />
-      }
-
-      {showResults && !loading &&
-        <div className="search_results">
-          <Results detected={results.results}/>
-        </div>
-      }
-
-
     </Container>
   )
 }
