@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 //TODO: research sizes so the object also returns the name of the device with the height and width
-function useWindowSize():{}{
+function useWindowSize():{width:number,height:number}{
   // Initialize state with undefined width/height so server and client renders match
   const [windowSize, setWindowSize] = useState({
     width: undefined,
