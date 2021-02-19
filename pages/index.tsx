@@ -2,7 +2,6 @@
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -48,12 +47,12 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  paperInputRoot:{
+  paperInputRoot: props =>({
     padding: '2px 4px',
     display: 'flex',
     alignItems: 'center',
-    //width: 400,
-  },
+    width: props.width < 1025 ? null : 'calc(45%)',
+  }),
   paperInputField:{
     marginLeft: theme.spacing(1),
     flex: 1,
@@ -144,33 +143,16 @@ const IndexPage = () => {
     setLoading(false)
   },[showResults,results])
 
+  const { width } = useWindowSize();
+  const styles = useStyles({ width });
 
-  const styles = useStyles();
-  const SearchBar = ()=>{
-    return(
-      <Paper component="form" onSubmit={(e)=>handleEnter(e)} className={styles.paperInputRoot}>
-        <input type="submit" style={{display: "none"}} />
-        <InputBase
-          className={styles.paperInputField}
-          placeholder="Search For Ingredient Here"
-          inputProps={{ 'aria-label': 'search for harmful ingredient' }}
-          //autoComplete="off"
-          value={search}
-          onChange={(e)=>setSearch(e.target.value)}
-        />
-        <IconButton type="submit" className={styles.paperInputIcon} aria-label="search">
-          <AddIcon />
-        </IconButton>
-
-    </Paper>
-    )
-  }
   return(
     <Container maxWidth="lg">
       <div className={styles.root}>
         <Grid container spacing={3}>
 
           <Grid item xs={12} >
+            <div className={width > 1025 ? styles.centeringContainer : null}>
             <Paper component="form" onSubmit={(e)=>handleAdd(e)} className={styles.paperInputRoot}>
               <input type="submit" style={{display: "none"}} />
               <InputBase
@@ -185,6 +167,7 @@ const IndexPage = () => {
                 <AddIcon />
               </IconButton>
             </Paper>
+            </div>
           </Grid>
 
           <Grid item xs={12} zeroMinWidth>
