@@ -17,7 +17,7 @@ type TermCon = {
 
 const useStyles = makeStyles({
   root: {
-    minWidth: 75,
+    maxWidth: 400,
     flex:'1 0 21%',
     display: 'flex',
     flexDirection: 'row',
@@ -25,25 +25,25 @@ const useStyles = makeStyles({
   },
   title: {
     fontSize: 14,
-    width:'100%'
-
     //wordWrap:'break-word',
     //display:'inline'
   },
+  content:{
+    overflow:'hidden'
+  }
 });
 
 const UserSearch = ({remove,term}:TermCon) =>{
   const styles = useStyles();
   return(
-    <Grid item xs={6} lg={3} zeroMinWidth>
+    <Grid item xs={6} lg={3}>
       <Card className={styles.root}>
-        <div style={{overflow:"hidden"}}>
-          <CardContent>
+          <CardContent className={styles.content}>
             <Typography className={styles.title} noWrap>
               {term}
             </Typography>
           </CardContent>
-        </div>
+
         <CardActions>
           <Button size="small" onClick={()=>remove(term)}><DeleteIcon/></Button>
         </CardActions>
