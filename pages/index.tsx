@@ -6,6 +6,9 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import InputBase from '@material-ui/core/InputBase';
+import AddIcon from '@material-ui/icons/Add';
 
 //other 3rd party imports
 import toast from 'react-hot-toast';
@@ -35,12 +38,31 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
-    '& div':{
-      display:'flex',
-      flexDirection:'row'
-    }
+    //'& div':{
+      //display:'flex',
+      //flexDirection:'row'
+    //}
   },
+  centeringContainer:{
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  paperInputRoot:{
+    padding: '2px 4px',
+    display: 'flex',
+    alignItems: 'center',
+    //width: 400,
+  },
+  paperInputField:{
+    marginLeft: theme.spacing(1),
+    flex: 1,
+  },
+  paperInputIcon:{
+    padding: 10,
+  }
 }));
+
 
 const IndexPage = () => {
   const [search,setSearch] = useState('');
@@ -50,7 +72,7 @@ const IndexPage = () => {
   const [loading,setLoading] = useState(false);
   //const windowSize = useWindowSize();
 
-  const handleEnter = (e:any):void =>{
+  const handleAdd = (e:any):void =>{
     e.preventDefault();
 
     //little input validation
@@ -122,22 +144,46 @@ const IndexPage = () => {
     setLoading(false)
   },[showResults,results])
 
+
   const styles = useStyles();
+  const SearchBar = ()=>{
+    return(
+      <Paper component="form" onSubmit={(e)=>handleEnter(e)} className={styles.paperInputRoot}>
+        <input type="submit" style={{display: "none"}} />
+        <InputBase
+          className={styles.paperInputField}
+          placeholder="Search For Ingredient Here"
+          inputProps={{ 'aria-label': 'search for harmful ingredient' }}
+          //autoComplete="off"
+          value={search}
+          onChange={(e)=>setSearch(e.target.value)}
+        />
+        <IconButton type="submit" className={styles.paperInputIcon} aria-label="search">
+          <AddIcon />
+        </IconButton>
+
+    </Paper>
+    )
+  }
   return(
     <Container maxWidth="lg">
       <div className={styles.root}>
         <Grid container spacing={3}>
 
-          <Grid item xs={12}>
-            <Paper className={styles.paper}>
-
-              <form className={styles.inputField} noValidate autoComplete="off" onSubmit={(e)=>handleEnter(e)}>
-                <input type="submit" style={{display: "none"}} />
-                <TextField
-                  id="filled-basic" color="secondary" value={search} label="Search For Ingredient Here" onChange={(e)=>setSearch(e.target.value)}
-                />
-              </form>
-
+          <Grid item xs={12} >
+            <Paper component="form" onSubmit={(e)=>handleAdd(e)} className={styles.paperInputRoot}>
+              <input type="submit" style={{display: "none"}} />
+              <InputBase
+                className={styles.paperInputField}
+                placeholder="Search For Ingredient Here"
+                inputProps={{ 'aria-label': 'search for harmful ingredient' }}
+                autoComplete="off"
+                value={search}
+                onChange={(e)=>setSearch(e.target.value)}
+              />
+              <IconButton onClick={(e)=> handleAdd(e)} type="submit" className={styles.paperInputIcon} aria-label="search">
+                <AddIcon />
+              </IconButton>
             </Paper>
           </Grid>
 
@@ -148,26 +194,31 @@ const IndexPage = () => {
               <Grid container spacing={3}>
                 {searches.map((term,i)=><UserSearch key={i} term={term} remove={handleDelete}/>)}
               </Grid>
-
+              <br></br>
               { searches.length > 0 && //only renders submit button once there are searches
-                <Button  onClick={(e)=>handleSubmit(e)} variant="contained">Submit</Button>
+                <div className={styles.centeringContainer}>
+                  <Button onClick={(e)=>handleSubmit(e)} variant="contained">
+                    Search
+                  </Button>
+                </div>
               }
             </Paper>
           </Grid>
 
           <Grid item xs={12}>
-              {loading &&
-                <Paper className={styles.paper}>
+            {loading &&
+              <Paper className={styles.paper}>
+                <div className={styles.centeringContainer}>
                   <CircularProgress /> Searching ...
-                </Paper>
-              }
+                </div>
+              </Paper>
+            }
 
-              {showResults && !loading &&
-                <Paper className={styles.paper}>
-                  <Results detected={results.results}/>
-                </Paper>
-              }
-
+            {showResults && !loading &&
+              <Paper className={styles.paper}>
+                <Results detected={results.results}/>
+              </Paper>
+            }
           </Grid>
 
         </Grid>
