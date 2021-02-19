@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Head from 'next/head';
 import { Toaster } from 'react-hot-toast';
 import { FaRegCopyright } from 'react-icons/fa';
+import  useWindowSize from '../hooks/useWindowSize';
 
 type Props = {
   children?: ReactNode
@@ -14,14 +15,15 @@ const useStyles = makeStyles({
     paddingRight:'10px'
   },
   footer: {
-    position:'fixed',
     bottom:'0',
-    width:'100%'
+    width:'100%',
+    position:'fixed'
   }
 });
 
 const Layout = ({ children, title = 'What Is In my food?', description='Does your food contain known carcinogens ?' }: Props) =>{
   const styles = useStyles();
+  const windowSize = useWindowSize(); //DO NOT renanme this to window!!!!!!!
 
   return(
     <>
@@ -35,7 +37,7 @@ const Layout = ({ children, title = 'What Is In my food?', description='Does you
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       </Head>
       {children}
-      <footer className={styles.footer} style={{position:'fixed',bottom:'0',width:'100%',paddingTop:'5px'}}>
+      <footer className={styles.footer}>
         <hr/>
         <span className={styles.span}>
           <span className={styles.span}><FaRegCopyright/></span>{new Date().getFullYear()}
@@ -49,7 +51,7 @@ const Layout = ({ children, title = 'What Is In my food?', description='Does you
 
       </footer>
       <Toaster
-        position="top-center"
+        position={windowSize.width > 1025 ? "top-center" : "bottom-center"}
         reverseOrder={false}
         toastOptions={{
           // Define default options
@@ -59,7 +61,7 @@ const Layout = ({ children, title = 'What Is In my food?', description='Does you
             color: '#fff',
             zIndex: 1,
           },
-          duration: 5000,
+          duration: 3000,
           // Default options for specific types
           success: {
             duration: 3000,
