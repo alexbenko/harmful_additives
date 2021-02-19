@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+
 
 type TermCon = {
   remove: Function
@@ -16,31 +18,32 @@ type TermCon = {
 const useStyles = makeStyles({
   root: {
     minWidth: 75,
-    flex:'1 0 21%'
-  },
-  container: {
-    padding:'10px',//just so their is space in between each search
-
+    flex:'1 0 21%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   title: {
     fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
+    width:'100%'
+
+    //wordWrap:'break-word',
+    //display:'inline'
   },
 });
 
 const UserSearch = ({remove,term}:TermCon) =>{
   const styles = useStyles();
   return(
-    <Grid item xs={3}>
-
+    <Grid item xs={6} lg={3} zeroMinWidth>
       <Card className={styles.root}>
-        <CardContent>
-          <Typography className={styles.title} color="inherit" gutterBottom noWrap>
-            {term}
-          </Typography>
-        </CardContent>
+        <div style={{overflow:"hidden"}}>
+          <CardContent>
+            <Typography className={styles.title} noWrap>
+              {term}
+            </Typography>
+          </CardContent>
+        </div>
         <CardActions>
           <Button size="small" onClick={()=>remove(term)}><DeleteIcon/></Button>
         </CardActions>
