@@ -7,8 +7,6 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 
-
-
 //other 3rd party imports
 import toast from 'react-hot-toast';
 import { useState,useEffect } from 'react';
@@ -145,36 +143,34 @@ const IndexPage = () => {
 
           <Grid item xs={12} zeroMinWidth>
             <Paper className={styles.paper}>
-
-                <h3 style={{padding:'5px'}}>Current Search Terms</h3>
-
+              <h3 style={{padding:'5px'}}>Current Search Terms</h3>
 
               <Grid container spacing={3}>
                 {searches.map((term,i)=><UserSearch key={i} term={term} remove={handleDelete}/>)}
               </Grid>
 
-              { searches.length > 0 &&
+              { searches.length > 0 && //only renders submit button once there are searches
                 <Button  onClick={(e)=>handleSubmit(e)} variant="contained">Submit</Button>
               }
             </Paper>
+          </Grid>
+
+          <Grid item xs={12}>
+              {loading &&
+                <Paper className={styles.paper}>
+                  <CircularProgress /> Searching ...
+                </Paper>
+              }
+
+              {showResults && !loading &&
+                <Paper className={styles.paper}>
+                  <Results detected={results.results}/>
+                </Paper>
+              }
 
           </Grid>
 
         </Grid>
-
-
-        {loading &&
-
-          <CircularProgress />
-        }
-
-        {showResults && !loading &&
-          <div className="search_results">
-            <Results detected={results.results}/>
-          </div>
-        }
-
-
       </div>
     </Container>
   )
