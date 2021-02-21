@@ -1,10 +1,7 @@
-import ResultCard from './ResultCard';
+import ResultTable from './ResultTable';
 import { Detected } from '../interfaces';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 
 const Results = ({ detected })=>{
-  console.log(detected.sweeteners)
   if(!(detected.sweeteners.length > 0) && !(detected.colors.length > 0) && !(detected.misc.length > 0)){
     return (
       <div>
@@ -12,26 +9,27 @@ const Results = ({ detected })=>{
       </div>
     )
   } else {
+
     return(
-      <div className="results-container">
-        <ResultCard
-          header={'Artificial Sweeteners'}
-          subtitle={''}
-          results={detected.sweeteners}
-        />
+      <div>
 
-        <ResultCard
-          header={'Artificial Coloring'}
-          subtitle={''}
-          results={detected.colors}
-        />
+          <ResultTable
+            header={'Artificial Sweeteners'}
+            results={detected.sweeteners}
+          />
 
-        <ResultCard
-          header={'Miscellaneous'}
-          subtitle={'A list of other harmful ingredients found in your food'}
-          results={detected.misc}
-        />
-      </div>
+          <ResultTable
+            header={'Artificial Coloring'}
+            results={detected.colors}
+          />
+
+          <ResultTable
+            header={'Miscellaneous Additives'}
+            results={detected.misc}
+          />
+        </div>
+
+
     )
   }
 }
