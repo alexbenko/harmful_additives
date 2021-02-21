@@ -14,7 +14,7 @@ const handler = async(req: NextApiRequest, res: NextApiResponse) => {
     response.results = data;
     res.status(200).send(response)
   } catch (err) {
-    console.error(err)
+    console.error('[API ERROR]',err)
     res.status(400).json({ statusCode: 400, message: err.message })
   }
 }
