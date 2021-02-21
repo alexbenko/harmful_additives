@@ -118,30 +118,58 @@ const IndexPage = () => {
     }
   };
 
-  const handleSubmit = async (e:any):Promise<void>=>{
+  const getData = async ()=>{
+
+    setLoading(true);
+    let copy = [...searches];
+
+    let results = await fetch('/api/analyze',{
+      method: 'PUT',
+      body: JSON.stringify(copy)
+    })
+    let parsed = await results.json()
+    console.log(parsed)
+    if(parsed.success){
+      setResults(parsed)
+      setShowResults(true)
+      if(parsed.noMatches){
+        toast("No Matches")
+      }
+    }else {
+      throw -1
+    }
+
+
+  };
+
+  const handleSubmit = async(e)=>{
+    e.preventDefault();
     if(searches.length === 0){
       toast('Please enter at least one search...')
       return
     };
 
-    e.preventDefault();
-    setLoading(true);
-    let copy = [...searches];
-    try{
-      let results = await fetch('/api/analyze',{
-        method: 'PUT',
-        body: JSON.stringify(copy)
-      })
-      let parsed = await results.json()
-      console.log(parsed)
-      setResults(parsed)
-      setShowResults(true)
-    }catch(err){
-      toast.error('Netowork Error,Please Check your connection or refresh the page.')
-      console.error(err)
-    }
-
-  };
+    toast.promise(
+      getData(),
+      {
+        loading: 'Loading...',
+        success: `Search Was A Success`,
+        error: `Request Failed Check your connection and try again.`,
+      },
+      {
+        style: {
+          minWidth: '250px',
+        },
+        success: {
+          duration: 5000,
+          icon: '🍃',
+        },
+        error:{
+          icon: '❌'
+        }
+      }
+    );
+  }
 
   useEffect(()=>{
     console.log("Results Got updated, no longer loading...")
@@ -194,13 +222,6 @@ const IndexPage = () => {
           </Grid>
 
           <Grid item xs={12} zeroMinWidth>
-            {loading &&
-              <Paper className={styles.paper}>
-                <div className={styles.centeringContainer}>
-                  <CircularProgress /> Searching ...
-                </div>
-              </Paper>
-            }
 
             {showResults && !loading &&
                 <Results detected={results.results}/>
