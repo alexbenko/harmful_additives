@@ -12,18 +12,25 @@ const search = async(searches:[string]):Promise<any>=>{
       const matches = await Promise.all(
         searches.map(async (search)=>{
           const result = await db.find({ $text: { $search: search} }).toArray();
-          return result[0]
+          if(!result[0]){
+            return {categeory:'',name:search}
+          } else {
+            return result[0]
+          }
         })
       )
+
+      console.log(matches[0] === undefined)
+      if(!matches[0] && matches.length <= 1){
+        throw "no matches"
+      }
       console.log(matches)
-      //const matches = await db.find({ name: { $in: searches}}).toArray();
-      //console.log(matches);
       matches.map((term,i):void=>{
-        if(term.category === "misc") {
+        if(term?.category === "misc") {
           detected.misc.push({title:term.name,why: term.why})
-        } else if(term.category === 'colors'){
+        } else if(term?.category === 'colors'){
           detected.colors.push({title:term.name,why: term.why})
-        } else if(term.category === "sweeteners"){
+        } else if(term?.category === "sweeteners"){
           detected.sweeteners.push({title:term.name,why: term.why})
         } else if(!(searches[i] in matches[i])){ //if a term from the users search is not in the matches
           detected.unknown.push(term.name)
