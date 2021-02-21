@@ -2,9 +2,9 @@ import ResultTable from './ResultTable';
 import { Detected } from '../interfaces';
 
 const Results = ({ detected })=>{
-  if(!(detected.sweeteners.length > 0) && !(detected.colors.length > 0) && !(detected.misc.length > 0)){
+  if(!(detected?.sweeteners.length > 0) && !(detected?.colors.length > 0) && !(detected?.misc.length > 0)){
     return (
-      <div>
+      <div style={{textAlign:'center'}}>
           No Matches
       </div>
     )
