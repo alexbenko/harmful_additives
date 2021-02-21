@@ -15,6 +15,7 @@ const useStyles = makeStyles({
     paddingRight:'10px'
   },
   footer: {
+    paddingTop:'10px',
     bottom:'0',
     width:'100%',
     position:'fixed'
@@ -33,8 +34,8 @@ const Layout = ({ children, title = 'What Is In my food?', description='Does you
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta name="og:keywords" content="Cancer, my food,is bad for me,cause cancer,what is in,my food,what is in my food,what is"/>
-        <meta name="og:description" content={description}/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <script data-ad-client="ca-pub-1968620871215463" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
       </Head>
       {children}
       <footer className={styles.footer}>
