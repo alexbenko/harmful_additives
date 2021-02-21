@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import AddIcon from '@material-ui/icons/Add';
 
+
 //other 3rd party imports
 import toast from 'react-hot-toast';
 import { useState,useEffect } from 'react';
@@ -17,6 +18,10 @@ import { useState,useEffect } from 'react';
 import UserSearch from '../components/UserSearch';
 import Results from '../components/Results';
 import useWindowSize from '../hooks/useWindowSize';
+
+interface StyleProps{
+  width:number
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  paperInputRoot: props =>({
+  paperInputRoot: (props:StyleProps) =>({
     padding: '2px 4px',
     display: 'flex',
     alignItems: 'center',
@@ -171,7 +176,7 @@ const IndexPage = () => {
           </Grid>
 
           <Grid item xs={12} zeroMinWidth>
-            <Paper className={styles.paper}>
+            { searches.length > 0 && <Paper className={styles.paper}>
               <h3 style={{padding:'5px'}}>Current Search Terms</h3>
 
               <Grid container spacing={3}>
@@ -185,10 +190,10 @@ const IndexPage = () => {
                   </Button>
                 </div>
               }
-            </Paper>
+            </Paper>}
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} zeroMinWidth>
             {loading &&
               <Paper className={styles.paper}>
                 <div className={styles.centeringContainer}>
@@ -198,9 +203,7 @@ const IndexPage = () => {
             }
 
             {showResults && !loading &&
-              <Paper className={styles.paper}>
                 <Results detected={results.results}/>
-              </Paper>
             }
           </Grid>
 
