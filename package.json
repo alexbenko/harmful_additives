@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "seed": "python3 data/create.py && node lib/seed.js"
+    "start": "next start"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.2",
