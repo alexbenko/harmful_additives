@@ -8,12 +8,20 @@ const search = async(searches:[string]):Promise<any>=>{
 
   try{
       const db = client.db("foodfinder").collection("matches");
-      const matches = await db.find( { $text: { $search: searches.join().replace(","," ")} } ).toArray();
-
+      //const matches = await db.find( { $text: { $search: searches.join().replace(","," ")} } ).toArray();
+      const matches = await Promise.all(
+        searches.map(async (search)=>{
+          const result = await db.find({ $text: { $search: search} }).toArray();
+          return result[0]
+        })
+      )
+      console.log(matches)
+      //const matches = await db.find({ name: { $in: searches}}).toArray();
+      //console.log(matches);
       matches.map((term,i):void=>{
         if(term.category === "misc") {
           detected.misc.push({title:term.name,why: term.why})
-        } else if(term === "colors"){
+        } else if(term.category === 'colors'){
           detected.colors.push({title:term.name,why: term.why})
         } else if(term.category === "sweeteners"){
           detected.sweeteners.push({title:term.name,why: term.why})
