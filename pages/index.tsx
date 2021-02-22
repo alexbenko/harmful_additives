@@ -8,16 +8,21 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import AddIcon from '@material-ui/icons/Add';
-
-
+import Switch from '@material-ui/core/Switch';
+import Typography from '@material-ui/core/Typography';
+import LinearProgress, { LinearProgressProps } from '@material-ui/core/LinearProgress';
+import Box from '@material-ui/core/Box';
 //other 3rd party imports
 import toast from 'react-hot-toast';
-import { useState,useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
+import { createWorker } from 'tesseract.js';
+import Image from 'next/image';
 
 //Custom imports
 import UserSearch from '../components/UserSearch';
 import Results from '../components/Results';
 import useWindowSize from '../hooks/useWindowSize';
+import ProgressBar from '../components/ProgressBar';
 
 interface StyleProps{
   width:number
@@ -74,9 +79,14 @@ const IndexPage = () => {
   const [showResults,setShowResults] = useState(false);
   const [results,setResults] = useState({results:{}});
   const [loading,setLoading] = useState(false);
+
+  const [manual,setManual] = useState(true);
+  const [uploads,setUploads] = useState([]);
+  const [progress,setProgress] = useState(0);
+  const [text,setText] = useState({text:'',confidence:null});
   //const windowSize = useWindowSize();
 
-  const handleAdd = (e:any):void =>{
+  const handleAdd = (e:React.FormEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>):void =>{
     e.preventDefault();
 
     //little input validation
@@ -101,6 +111,48 @@ const IndexPage = () => {
     }
   };
 
+  const handleImageUpload = async(e)=>{
+    if(progress !== 0) setProgress(0);
+    if(uploads.length > 1){
+      toast.error("Only one image uploaded at a time for now.");
+      return;
+    }
+    if(e.target.files[0]){
+      for (let key in e.target.files) {
+        if (!e.target.files.hasOwnProperty(key)) continue;
+        let upload = e.target.files[key]
+        console.log(upload)
+        setUploads(prevArray => [...prevArray, URL.createObjectURL(upload)])
+      }
+    } else {
+      setUploads([]);
+    }
+  };
+
+  const read = async()=>{
+    let start = new Date().getTime();
+    const worker = createWorker({
+      logger: (job)=>{
+        console.log(job)
+        setProgress(progress + 1)
+        if(job.status === "recognizing text"){
+          setProgress(job.progress * 100) //progressbar takes values from 0-100
+        }
+      }
+    });
+
+    await worker.load();
+    await worker.loadLanguage('eng');
+    await worker.initialize('eng');
+    const { data } = await worker.recognize(uploads[0]);
+    console.log(data.text.split(", "))
+    console.log(data.confidence)
+    setText({text:data.text,confidence:data.confidence})
+    await worker.terminate();
+    let end = new Date().getTime();
+    console.log(`Took ${(end - start)/1000}seconds`)
+  }
+
   const handleDelete = (toDelete:string):void=>{
     //copy state array as i cant mutate directly
     let copiedState = [...searches];
@@ -119,7 +171,6 @@ const IndexPage = () => {
   };
 
   const getData = async ()=>{
-
     setLoading(true);
     let copy = [...searches];
 
@@ -138,11 +189,9 @@ const IndexPage = () => {
     }else {
       throw -1
     }
-
-
   };
 
-  const handleSubmit = async(e)=>{
+  const handleSubmit = async(e:React.MouseEvent<HTMLButtonElement, MouseEvent>):Promise<void>=>{
     e.preventDefault();
     if(searches.length === 0){
       toast('Please enter at least one search...')
@@ -161,8 +210,7 @@ const IndexPage = () => {
           minWidth: '250px',
         },
         success: {
-          duration: 5000,
-          icon: '🍃',
+          icon: '🍃'
         },
         error:{
           icon: '❌'
@@ -172,9 +220,12 @@ const IndexPage = () => {
   }
 
   useEffect(()=>{
-    console.log("Results Got updated, no longer loading...")
     setLoading(false)
   },[showResults,results])
+
+  useEffect(()=>{
+    console.log(uploads)
+  },[uploads])
 
   const { width } = useWindowSize();
   const styles = useStyles({ width });
@@ -185,22 +236,52 @@ const IndexPage = () => {
         <Grid container spacing={3}>
 
           <Grid item xs={12} >
-            <div className={width > 1025 ? styles.centeringContainer : null}>
-            <Paper component="form" onSubmit={(e)=>handleAdd(e)} className={styles.paperInputRoot}>
-              <input type="submit" style={{display: "none"}} />
-              <InputBase
-                className={styles.paperInputField}
-                placeholder="Search For Ingredient Here"
-                inputProps={{ 'aria-label': 'search for harmful ingredient' }}
-                autoComplete="off"
-                value={search}
-                onChange={(e)=>setSearch(e.target.value)}
+            <div className={styles.centeringContainer}>
+              <Typography>Manual Entry</Typography>
+              <Switch
+                checked={!manual}
+                onChange={()=>setManual(!manual)}
+                name="Manual"
+                inputProps={{ 'aria-label': 'manual entry' }}
               />
-              <IconButton onClick={(e)=> handleAdd(e)} type="submit" className={styles.paperInputIcon} aria-label="search">
-                <AddIcon />
-              </IconButton>
-            </Paper>
+              <Typography>Upload Image</Typography>
             </div>
+            <div className={width > 1025 ? styles.centeringContainer : null}>
+              { manual ?
+                <Paper component="form" onSubmit={(e)=>handleAdd(e)} className={styles.paperInputRoot}>
+                  <input type="submit" style={{display: "none"}} />
+                  <InputBase
+                    className={styles.paperInputField}
+                    placeholder="Add For Ingredient Here"
+                    inputProps={{ 'aria-label': 'search for harmful ingredient' }}
+                    autoComplete="off"
+                    value={search}
+                    onChange={(e)=>setSearch(e.target.value)}
+                  />
+                  <IconButton onClick={(e)=> handleAdd(e)} type="submit" className={styles.paperInputIcon} aria-label="search">
+                    <AddIcon />
+                  </IconButton>
+                </Paper> :
+
+                <div>
+                    <label className="fileUploaderContainer">
+                      Click here to upload Image
+                      <input type="file" id="fileUploader" onChange={(e)=>handleImageUpload(e)} multiple />
+                    </label>
+
+                    <div>
+                      {uploads.map((img,i:number)=> <img width="250px" key={i} src={img}/>)}
+                    </div>
+                    <Button variant="contained" onClick={()=>read()}>Submit</Button>
+                    <ProgressBar value={progress}/>
+                    {text.text}
+                    {text.confidence}
+                </div>
+
+              }
+            </div>
+
+
           </Grid>
 
           <Grid item xs={12} zeroMinWidth>
