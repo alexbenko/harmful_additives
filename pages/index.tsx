@@ -93,6 +93,8 @@ const IndexPage = () => {
     setProgress(0);
     setText({text:'',confidence:null});
     setCurrentAction(null);
+    setShowResults(false)
+    setResults({results:{}})
   },[manual])
 
   const worker = createWorker({
