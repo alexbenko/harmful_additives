@@ -82,9 +82,31 @@ const IndexPage = () => {
 
   const [manual,setManual] = useState(true);
   const [uploads,setUploads] = useState([]);
+  const [base64Image,setBase64Image] = useState<string | ArrayBuffer>('');
   const [progress,setProgress] = useState(0);
+  const [currentAction,setCurrentAction] = useState<null | string>(null)
   const [text,setText] = useState({text:'',confidence:null});
-  //const windowSize = useWindowSize();
+
+  useEffect(()=>{
+    //setSearches([]);
+    setBase64Image('');
+    setProgress(0);
+    setText({text:'',confidence:null});
+    setCurrentAction(null);
+  },[manual])
+
+  const worker = createWorker({
+    logger: (job)=>{
+      console.log(job)
+      if(job.status === "recognizing text"){
+        if(currentAction !== "recognizing text") setCurrentAction("Recognizing Text");
+        setProgress(job.progress * 100) //progressbar takes values from 0-100
+      } else {
+        setCurrentAction(job.status.split(' ')[0])
+      }
+    }
+  });
+
 
   const handleAdd = (e:React.FormEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>):void =>{
     e.preventDefault();
@@ -111,12 +133,25 @@ const IndexPage = () => {
     }
   };
 
-  const handleImageUpload = async(e)=>{
+  const convertImageToBase64 = async(e)=>{
     if(progress !== 0) setProgress(0);
-    if(uploads.length > 1){
-      toast.error("Only one image uploaded at a time for now.");
-      return;
+
+    let file = e.target.files[0]
+    if(file){
+      let reader = new FileReader();
+      reader.onloadend = ()=> {
+        toast.success('Image Successfully encoded.')
+        console.log('For you curious people who want to know if I actually encode your image. Here it is: \n', reader.result)
+        setBase64Image(reader.result);
+      }
+
+      reader.readAsDataURL(file);
     }
+  }
+
+  /*const handleImageUpload = async(e)=>{
+    if(progress !== 0) setProgress(0);
+
     if(e.target.files[0]){
       for (let key in e.target.files) {
         if (!e.target.files.hasOwnProperty(key)) continue;
@@ -128,29 +163,33 @@ const IndexPage = () => {
       setUploads([]);
     }
   };
-
+*/
   const read = async()=>{
-    let start = new Date().getTime();
-    const worker = createWorker({
-      logger: (job)=>{
-        console.log(job)
-        setProgress(progress + 1)
-        if(job.status === "recognizing text"){
-          setProgress(job.progress * 100) //progressbar takes values from 0-100
-        }
-      }
-    });
+    console.log('Reading Image ...');
+    if(progress !== 0) setProgress(0);
 
-    await worker.load();
-    await worker.loadLanguage('eng');
-    await worker.initialize('eng');
-    const { data } = await worker.recognize(uploads[0]);
-    console.log(data.text.split(", "))
-    console.log(data.confidence)
-    setText({text:data.text,confidence:data.confidence})
-    await worker.terminate();
-    let end = new Date().getTime();
-    console.log(`Took ${(end - start)/1000}seconds`)
+    try{
+      toast('Loading Image...')
+      let start = new Date().getTime();
+      await worker.load();
+      await worker.loadLanguage('eng');
+      await worker.initialize('eng');
+      const { data } = await worker.recognize(base64Image);
+      console.log('Confidence: ',data.confidence)
+      if(data.confidence < 80){
+        toast(`Warning: I am only ${data.confidence}% confident that I read your image accurately.`)
+      }
+      await worker.terminate();
+      setText({text:data.text,confidence:data.confidence})
+      setSearches(data.text.split(", "))
+      let end = new Date().getTime();
+      console.log(`Took ${(end - start)/1000}seconds`);
+    }catch(err){
+      console.log('Error Reading Image: ',err)
+      toast.error("Error trying to read image. Refresh the page and try again please.")
+    }
+
+    //setSearches()
   }
 
   const handleDelete = (toDelete:string):void=>{
@@ -170,11 +209,12 @@ const IndexPage = () => {
     }
   };
 
-  const getData = async ()=>{
+  const getData = async (e)=>{
+    e.preventDefault()
     setLoading(true);
     let copy = [...searches];
 
-    let results = await fetch('/api/analyze',{
+    let results = await fetch('/api/findmatches',{
       method: 'PUT',
       body: JSON.stringify(copy)
     })
@@ -199,7 +239,7 @@ const IndexPage = () => {
     };
 
     toast.promise(
-      getData(),
+      getData(e),
       {
         loading: 'Loading...',
         success: `Search Was A Success`,
@@ -222,10 +262,6 @@ const IndexPage = () => {
   useEffect(()=>{
     setLoading(false)
   },[showResults,results])
-
-  useEffect(()=>{
-    console.log(uploads)
-  },[uploads])
 
   const { width } = useWindowSize();
   const styles = useStyles({ width });
@@ -266,15 +302,13 @@ const IndexPage = () => {
                 <div>
                     <label className="fileUploaderContainer">
                       Click here to upload Image
-                      <input type="file" id="fileUploader" onChange={(e)=>handleImageUpload(e)} multiple />
+                      <input type="file" id="fileUploader" onChange={(e)=>convertImageToBase64(e)}/>
                     </label>
 
-                    <div>
-                      {uploads.map((img,i:number)=> <img width="250px" key={i} src={img}/>)}
-                    </div>
                     <Button variant="contained" onClick={()=>read()}>Submit</Button>
-                    <ProgressBar value={progress}/>
+                    <ProgressBar value={progress} action={currentAction}/>
                     {text.text}
+                    <br></br>
                     {text.confidence}
                 </div>
 
