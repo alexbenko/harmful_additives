@@ -3,7 +3,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 
 
-const ProgressBar = (props: LinearProgressProps & { value: number })=>{
+const ProgressBar = (props: LinearProgressProps & { value: number, action: string })=>{
   return(
     <Box display="flex" alignItems="center">
       <Box width="100%" mr={1}>
@@ -12,6 +12,7 @@ const ProgressBar = (props: LinearProgressProps & { value: number })=>{
       <Box minWidth={35}>
         <Typography variant="body2" color="textSecondary">{`${Math.round(props.value,)}%`}</Typography>
       </Box>
+      {props.action}
     </Box>
   )
 }
