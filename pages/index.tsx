@@ -321,26 +321,28 @@ const IndexPage = () => {
           </Grid>
 
           <Grid item xs={12} zeroMinWidth>
-            { searches.length > 0 && <Paper className={styles.paper}>
-              <h3 style={{padding:'5px'}}>Current Search Terms</h3>
+            { searches.length > 0 &&
+              <Paper className={styles.paper}>
+                <h3 style={{padding:'5px'}}>Current Search Terms</h3>
 
-              <Grid container spacing={3}>
-                {searches.map((term,i)=><UserSearch key={i} term={term} remove={handleDelete}/>)}
-              </Grid>
-              <br></br>
-              { searches.length > 0 && //only renders submit button once there are searches
-                <div className={styles.centeringContainer}>
-                  <Button onClick={(e)=>handleSubmit(e)} variant="contained">
-                    Search
-                  </Button>
-                </div>
-              }
-            </Paper>}
+                <Grid container spacing={3}>
+                  {searches.map((term,i)=><UserSearch key={i} term={term} remove={handleDelete}/>)}
+                </Grid>
+                <br></br>
+                { searches.length > 0 && //only renders submit button once there are searches
+                  <div className={styles.centeringContainer}>
+                    <Button onClick={(e)=>handleSubmit(e)} variant="contained">
+                      Search
+                    </Button>
+                  </div>
+                }
+              </Paper>
+            }
           </Grid>
 
           <Grid item xs={12} zeroMinWidth>
 
-            {showResults && !loading &&
+            {showResults && !loading && results.results &&
                 <Results detected={results.results}/>
             }
           </Grid>
