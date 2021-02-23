@@ -99,7 +99,7 @@ const IndexPage = () => {
     logger: (job)=>{
       console.log(job)
       if(job.status === "recognizing text"){
-        if(currentAction !== "recognizing text") setCurrentAction("Recognizing Text");
+        if(currentAction !== "Recognizing Text") setCurrentAction("Recognizing Text");
         setProgress(job.progress * 100) //progressbar takes values from 0-100
       } else {
         setCurrentAction(job.status.split(' ')[0])
