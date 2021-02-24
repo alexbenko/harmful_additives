@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   },[])
-  console.log("Hello")
+
   return (
     <>
       <Head>
