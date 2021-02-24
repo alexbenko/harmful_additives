@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
 import Layout from '../components/Layout'
 import '../styles/index.css';
+import Head from 'next/head';
+
+
 
 function MyApp({ Component, pageProps }) {
   useEffect(()=>{
@@ -9,7 +12,23 @@ function MyApp({ Component, pageProps }) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   },[])
-  return <Layout> <Component {...pageProps} /> </Layout>
+  console.log("Hello")
+  return (
+    <>
+      <Head>
+        <title>What Is In my food?</title>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta name="og:keywords" content="Cancer, my food,is bad for me,cause cancer,what is in,my food,what is in my food,what is"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      </Head>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </>
+
+
+  )
 }
 
 export default MyApp

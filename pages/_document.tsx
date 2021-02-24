@@ -10,6 +10,8 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
+        <link rel="shortcut icon" href="/favicon.svg" />
+        <script data-ad-client="ca-pub-1968620871215463" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" key="goo"></script>
           <meta charSet="utf-8" />
           <meta name="theme-color" content={theme.palette.primary.main} />
           <link

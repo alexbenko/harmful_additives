@@ -22,21 +22,12 @@ const useStyles = makeStyles({
   }
 });
 
-const Layout = ({ children, title = 'What Is In my food?', description='Does your food contain known carcinogens ?' }: Props) =>{
+const Layout = ({ children }: Props) =>{
   const styles = useStyles();
   const windowSize = useWindowSize(); //DO NOT renanme this to window!!!!!!!
-
   return(
     <>
-      <Head>
-        <title>{title}</title>
-        <link rel="shortcut icon" href="/favicon.svg" />
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta name="og:keywords" content="Cancer, my food,is bad for me,cause cancer,what is in,my food,what is in my food,what is"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <script data-ad-client="ca-pub-1968620871215463" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-      </Head>
+
       {children}
       <footer className={styles.footer}>
         <hr/>
