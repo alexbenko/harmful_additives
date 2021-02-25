@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import grey from '@material-ui/core/colors/grey';
+import green from '@material-ui/core/colors/green';
 
 type TermCon = {
   remove: Function
@@ -47,7 +48,7 @@ const UserSearch = ({remove,term}:TermCon) =>{
     <div className={styles.root}>
       <Paper className={styles.paper}>
         <Tooltip title="Delete" arrow>
-          <IconButton onClick={()=>remove(term)} aria-label={`delete-${term}`} className={styles.icon}>
+          <IconButton style={{color:green[400]}} onClick={()=>remove(term)} aria-label={`delete-${term}`} className={styles.icon}>
             <DeleteIcon fontSize="small"/>
           </IconButton>
         </Tooltip>
