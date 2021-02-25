@@ -17,7 +17,7 @@ const useStyles = makeStyles({
     //paddingTop:'10px',
     bottom:'0',
     width:'100%',
-    position:'relative'
+    position:'fixed'
   }
 });
 
