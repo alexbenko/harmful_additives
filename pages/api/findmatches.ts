@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Detected } from '../../interfaces'
+import { Detected } from '../../interfaces';
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://alexbenko:phelps521@cluster0.nvy3b.mongodb.net/foodfinder?retryWrites=true&w=majority";
 

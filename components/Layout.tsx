@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Head from 'next/head';
 import { Toaster } from 'react-hot-toast';
 import { FaRegCopyright } from 'react-icons/fa';
 import  useWindowSize from '../hooks/useWindowSize';
@@ -15,10 +14,10 @@ const useStyles = makeStyles({
     paddingRight:'10px'
   },
   footer: {
-    paddingTop:'10px',
+    //paddingTop:'10px',
     bottom:'0',
     width:'100%',
-    position:'fixed'
+    position:'relative'
   }
 });
 
@@ -37,13 +36,12 @@ const Layout = ({ children }: Props) =>{
         <span className={styles.span}>
           Made By:
           <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/alexander-benko-06b99a1a4/">
-            Alexander Benko
           </a>
         </span>
 
       </footer>
       <Toaster
-        position={windowSize.width > 1025 ? "top-center" : "bottom-center"}
+        position={"bottom-center"}
         reverseOrder={false}
         toastOptions={{
           // Define default options

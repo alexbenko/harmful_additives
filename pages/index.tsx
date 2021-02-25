@@ -1,6 +1,6 @@
 // MUI imports
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, createMuiTheme, ThemeProvider,  withStyles, Theme} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -10,12 +10,11 @@ import InputBase from '@material-ui/core/InputBase';
 import AddIcon from '@material-ui/icons/Add';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
-import LinearProgress, { LinearProgressProps } from '@material-ui/core/LinearProgress';
-import Box from '@material-ui/core/Box';
+import green from '@material-ui/core/colors/green';
 //other 3rd party imports
 import toast from 'react-hot-toast';
 import React, { useState,useEffect } from 'react';
-import { createWorker } from 'tesseract.js';
+import { createWorker, ImageLike} from 'tesseract.js';
 import Image from 'next/image';
 
 //Custom imports
@@ -31,7 +30,9 @@ interface StyleProps{
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    paddingTop:'10px'
+    paddingTop:'10px',
+    wordWrap:'break-word',
+    color:green[100]
   },
   inputField: {
     '& > *': {
@@ -46,11 +47,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection:'column',
     padding: theme.spacing(2),
     textAlign: 'center',
-    color: theme.palette.text.secondary,
-    //'& div':{
-      //display:'flex',
-      //flexDirection:'row'
-    //}
+    color: '#FFFFFF',
+    backgroundColor:'#212121'
   },
   centeringContainer:{
     display: 'flex',
@@ -69,9 +67,19 @@ const useStyles = makeStyles((theme) => ({
   },
   paperInputIcon:{
     padding: 10,
-  }
+  },
+
 }));
 
+const ColorButton = withStyles((theme: Theme) => ({
+  root: {
+    color: theme.palette.getContrastText(green[500]),
+    backgroundColor: green[500],
+    '&:hover': {
+      backgroundColor: green[700],
+    },
+  },
+}))(Button);
 
 const IndexPage = () => {
   const [search,setSearch] = useState('');
@@ -82,7 +90,7 @@ const IndexPage = () => {
 
   const [manual,setManual] = useState(true);
   const [uploads,setUploads] = useState([]);
-  const [base64Image,setBase64Image] = useState<string | ArrayBuffer>('');
+  const [base64Image,setBase64Image] = useState<ImageLike>('');
   const [progress,setProgress] = useState(0);
   const [currentAction,setCurrentAction] = useState<null | string>(null)
   const [text,setText] = useState({text:'',confidence:null});
@@ -97,9 +105,11 @@ const IndexPage = () => {
     setResults({results:{}})
   },[manual])
 
+  useEffect(()=>{
+    console.log(base64Image)
+  },[base64Image])
   const worker = createWorker({
     logger: (job)=>{
-      console.log(job)
       if(job.status === "recognizing text"){
         if(currentAction !== "Recognizing Text") setCurrentAction("Recognizing Text");
         setProgress(job.progress * 100) //progressbar takes values from 0-100
@@ -140,14 +150,19 @@ const IndexPage = () => {
 
     let file = e.target.files[0]
     if(file){
-      let reader = new FileReader();
+      setBase64Image(file)
+      /*let reader = new FileReader();
       reader.onloadend = ()=> {
+
+        let result = (reader.result as string).split(',')[1];
+        console.log(result)
         toast.success('Image Successfully encoded.')
-        console.log('For you curious people who want to know if I actually encode your image. Here it is: \n', reader.result)
-        setBase64Image(reader.result);
+        //console.log('For you curious people who want to know if I actually encode your image. Here it is: \n', reader.result);
+        setBase64Image(Buffer.from(result, 'base64'));
       }
 
       reader.readAsDataURL(file);
+      */
     }
   }
 
@@ -273,8 +288,10 @@ const IndexPage = () => {
       <div className={styles.root}>
         <Grid container spacing={3}>
 
-          <Grid item xs={12} >
+          <Grid item xs={12} zeroMinWidth>
+          <Paper className={styles.paper}>
             <div className={styles.centeringContainer}>
+
               <Typography>Manual Entry</Typography>
               <Switch
                 checked={!manual}
@@ -283,21 +300,23 @@ const IndexPage = () => {
                 inputProps={{ 'aria-label': 'manual entry' }}
               />
               <Typography>Upload Image</Typography>
+
             </div>
+
             <div className={width > 1025 ? styles.centeringContainer : null}>
               { manual ?
                 <Paper component="form" onSubmit={(e)=>handleAdd(e)} className={styles.paperInputRoot}>
                   <input type="submit" style={{display: "none"}} />
                   <InputBase
                     className={styles.paperInputField}
-                    placeholder="Add For Ingredient Here"
+                    placeholder="Add Ingredient Here"
                     inputProps={{ 'aria-label': 'search for harmful ingredient' }}
                     autoComplete="off"
                     value={search}
                     onChange={(e)=>setSearch(e.target.value)}
                   />
                   <IconButton onClick={(e)=> handleAdd(e)} type="submit" className={styles.paperInputIcon} aria-label="search">
-                    <AddIcon />
+                    <AddIcon style={{color: 'black'}}/>
                   </IconButton>
                 </Paper> :
 
@@ -309,18 +328,24 @@ const IndexPage = () => {
 
                     <Button variant="contained" onClick={()=>read()}>Submit</Button>
                     <ProgressBar value={progress} action={currentAction}/>
-                    {text.text}
-                    <br></br>
-                    {text.confidence}
+
                 </div>
 
               }
             </div>
 
+            { search.length === 0 &&
+
+                <Typography >
+                  Search a database with 100s of records of commonly food ingredients/additives. Type them out or upload a picture of the ingredient list.
+                </Typography>
+            }
+            </Paper>
+
 
           </Grid>
 
-          <Grid item xs={12} zeroMinWidth>
+          <Grid item xs={12}>
             { searches.length > 0 &&
               <Paper className={styles.paper}>
                 <h3 style={{padding:'5px'}}>Current Search Terms</h3>
@@ -331,9 +356,9 @@ const IndexPage = () => {
                 <br></br>
                 { searches.length > 0 && //only renders submit button once there are searches
                   <div className={styles.centeringContainer}>
-                    <Button onClick={(e)=>handleSubmit(e)} variant="contained">
+                    <ColorButton variant="contained" size="large" color="primary" onClick={(e)=>handleSubmit(e)}>
                       Search
-                    </Button>
+                    </ColorButton>
                   </div>
                 }
               </Paper>
