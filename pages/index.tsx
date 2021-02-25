@@ -11,6 +11,8 @@ import AddIcon from '@material-ui/icons/Add';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 import green from '@material-ui/core/colors/green';
+import grey from '@material-ui/core/colors/grey';
+
 //other 3rd party imports
 import toast from 'react-hot-toast';
 import React, { useState,useEffect } from 'react';
@@ -60,6 +62,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     width: props.width < 1025 ? null : 'calc(45%)',
+    backgroundColor: grey[700],
+    color:'#FFFFFF'
   }),
   paperInputField:{
     marginLeft: theme.spacing(1),
@@ -73,8 +77,8 @@ const useStyles = makeStyles((theme) => ({
 
 const ColorButton = withStyles((theme: Theme) => ({
   root: {
-    color: theme.palette.getContrastText(green[500]),
-    backgroundColor: green[500],
+    color: theme.palette.getContrastText(green[400]),
+    backgroundColor: green[400],
     '&:hover': {
       backgroundColor: green[700],
     },
@@ -308,6 +312,7 @@ const IndexPage = () => {
                 <Paper component="form" onSubmit={(e)=>handleAdd(e)} className={styles.paperInputRoot}>
                   <input type="submit" style={{display: "none"}} />
                   <InputBase
+                    spellCheck={true}
                     className={styles.paperInputField}
                     placeholder="Add Ingredient Here"
                     inputProps={{ 'aria-label': 'search for harmful ingredient' }}
@@ -316,7 +321,7 @@ const IndexPage = () => {
                     onChange={(e)=>setSearch(e.target.value)}
                   />
                   <IconButton onClick={(e)=> handleAdd(e)} type="submit" className={styles.paperInputIcon} aria-label="search">
-                    <AddIcon style={{color: 'black'}}/>
+                    <AddIcon style={{color: '#FFFFFF'}}/>
                   </IconButton>
                 </Paper> :
 
