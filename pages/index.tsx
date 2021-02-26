@@ -1,5 +1,4 @@
 // MUI imports
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles, createMuiTheme, ThemeProvider,  withStyles, Theme} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
@@ -8,10 +7,13 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import AddIcon from '@material-ui/icons/Add';
-import Switch from '@material-ui/core/Switch';
+import Fab from '@material-ui/core/Fab';
 import Typography from '@material-ui/core/Typography';
 import green from '@material-ui/core/colors/green';
 import grey from '@material-ui/core/colors/grey';
+import PublishIcon from '@material-ui/icons/Publish';
+import Tooltip from '@material-ui/core/Tooltip';
+
 
 //other 3rd party imports
 import toast from 'react-hot-toast';
@@ -62,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     width: props.width < 1025 ? null : 'calc(45%)',
-    backgroundColor: grey[700],
+    backgroundColor: grey[500],
     color:'#FFFFFF'
   }),
   paperInputField:{
@@ -77,8 +79,8 @@ const useStyles = makeStyles((theme) => ({
 
 const ColorButton = withStyles((theme: Theme) => ({
   root: {
-    color: theme.palette.getContrastText(green[400]),
-    backgroundColor: green[400],
+    color: theme.palette.getContrastText(green.A400),
+    backgroundColor: green.A400,
     '&:hover': {
       backgroundColor: green[700],
     },
@@ -100,29 +102,32 @@ const IndexPage = () => {
   const [text,setText] = useState({text:'',confidence:null});
 
   useEffect(()=>{
-    //setSearches([]);
-    setBase64Image('');
-    setProgress(0);
-    setText({text:'',confidence:null});
-    setCurrentAction(null);
-    setShowResults(false)
-    setResults({results:{}})
-  },[manual])
+    setLoading(false)
+  },[showResults,results])
 
   useEffect(()=>{
-    console.log(base64Image)
+    if(base64Image){
+      setCurrentAction("Uploading Image")
+      read();
+    }
   },[base64Image])
+
+  useEffect(()=>{
+    if(progress === 100 && currentAction === "Recognizing Text"){
+      setCurrentAction("Done !")
+    }
+  },[progress])
   const worker = createWorker({
     logger: (job)=>{
       if(job.status === "recognizing text"){
         if(currentAction !== "Recognizing Text") setCurrentAction("Recognizing Text");
+        console.log(job.progress)
         setProgress(job.progress * 100) //progressbar takes values from 0-100
       } else {
         setCurrentAction(job.status.split(' ')[0])
       }
     }
   });
-
 
   const handleAdd = (e:React.FormEvent<HTMLDivElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>):void =>{
     e.preventDefault();
@@ -151,7 +156,6 @@ const IndexPage = () => {
 
   const convertImageToBase64 = async(e)=>{
     if(progress !== 0) setProgress(0);
-
     let file = e.target.files[0]
     if(file){
       setBase64Image(file)
@@ -167,6 +171,8 @@ const IndexPage = () => {
 
       reader.readAsDataURL(file);
       */
+    }else{
+      setBase64Image('')
     }
   }
 
@@ -280,9 +286,6 @@ const IndexPage = () => {
     );
   }
 
-  useEffect(()=>{
-    setLoading(false)
-  },[showResults,results])
 
   const { width } = useWindowSize();
   const styles = useStyles({ width });
@@ -294,51 +297,42 @@ const IndexPage = () => {
 
           <Grid item xs={12} zeroMinWidth>
           <Paper className={styles.paper}>
-            <div className={styles.centeringContainer}>
-
-              <Typography>Manual Entry</Typography>
-              <Switch
-                checked={!manual}
-                onChange={()=>setManual(!manual)}
-                name="Manual"
-                inputProps={{ 'aria-label': 'manual entry' }}
-              />
-              <Typography>Upload Image</Typography>
-
-            </div>
-
             <div className={width > 1025 ? styles.centeringContainer : null}>
-              { manual ?
+
+
                 <Paper component="form" onSubmit={(e)=>handleAdd(e)} className={styles.paperInputRoot}>
                   <input type="submit" style={{display: "none"}} />
                   <InputBase
                     spellCheck={true}
                     className={styles.paperInputField}
-                    placeholder="Add Ingredient Here"
+                    placeholder="Type Ingredient Here"
                     inputProps={{ 'aria-label': 'search for harmful ingredient' }}
                     autoComplete="off"
                     value={search}
                     onChange={(e)=>setSearch(e.target.value)}
                   />
                   <IconButton onClick={(e)=> handleAdd(e)} type="submit" className={styles.paperInputIcon} aria-label="search">
-                    <AddIcon style={{color: '#FFFFFF'}}/>
+                    <Tooltip title="Click me or press enter to add to your search" arrow placement="top">
+                      <AddIcon style={{color: '#FFFFFF'}}/>
+                    </Tooltip>
                   </IconButton>
-                </Paper> :
+                </Paper>
 
-                <div>
-                    <label className="fileUploaderContainer">
-                      Click here to upload Image
-                      <input type="file" id="fileUploader" onChange={(e)=>convertImageToBase64(e)}/>
-                    </label>
-
-                    <Button variant="contained" onClick={()=>read()}>Submit</Button>
-                    <ProgressBar value={progress} action={currentAction}/>
-
+                <div style={{paddingLeft:'10px'}}>
+                  <Tooltip title="Upload Image Here" arrow placement="top">
+                    <Fab component="label" size="medium">
+                      <input type="file" hidden onChange={(e)=>convertImageToBase64(e)}/>
+                      <PublishIcon/>
+                    </Fab>
+                  </Tooltip>
                 </div>
 
-              }
-            </div>
 
+
+
+
+            </div>
+            {base64Image && <ProgressBar value={progress} action={currentAction}/>}
             { search.length === 0 &&
 
                 <Typography >
