@@ -117,6 +117,7 @@ const IndexPage = () => {
       setCurrentAction("Done !")
     }
   },[progress])
+
   const worker = createWorker({
     logger: (job)=>{
       if(job.status === "recognizing text"){
@@ -320,17 +321,12 @@ const IndexPage = () => {
 
                 <div style={{paddingLeft:'10px'}}>
                   <Tooltip title="Upload Image Here" arrow placement="top">
-                    <Fab component="label" size="medium">
+                    <Fab component="label" size="medium" style={{backgroundColor: green.A400}}>
                       <input type="file" hidden onChange={(e)=>convertImageToBase64(e)}/>
                       <PublishIcon/>
                     </Fab>
                   </Tooltip>
                 </div>
-
-
-
-
-
             </div>
             {base64Image && <ProgressBar value={progress} action={currentAction}/>}
             { search.length === 0 &&
