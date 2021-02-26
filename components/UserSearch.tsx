@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
       //maxWidth: 400,
       margin: `${theme.spacing(1)}px auto`,
       padding: '10px',//theme.spacing(2),
-      backgroundColor:grey[600],
+      backgroundColor:grey[500],
       color:'#FFFFFF'
     },
   }),
@@ -48,7 +48,7 @@ const UserSearch = ({remove,term}:TermCon) =>{
     <div className={styles.root}>
       <Paper className={styles.paper}>
         <Tooltip title="Delete" arrow>
-          <IconButton style={{color:green[400]}} onClick={()=>remove(term)} aria-label={`delete-${term}`} className={styles.icon}>
+          <IconButton style={{color:green.A400}} onClick={()=>remove(term)} aria-label={`delete-${term}`} className={styles.icon}>
             <DeleteIcon fontSize="small"/>
           </IconButton>
         </Tooltip>
