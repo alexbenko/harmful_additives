@@ -34,8 +34,8 @@ const Layout = ({ children }: Props) =>{
           <span className={styles.span}><FaRegCopyright/></span>{new Date().getFullYear()}
         </span>
         <span className={styles.span}>
-          Made By:
           <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/alexander-benko-06b99a1a4/">
+          Made By: Alexander Benko
           </a>
         </span>
 
