@@ -5,8 +5,8 @@ Deployed on [Vercel](https://harmful-additives.vercel.app/)
 ## Tech Stack:
 <ul>
   <li>Nextjs (Reactjs and Nodejs)</li>
-  <li> <a href="https://tesseract.projectnaptha.com/">Tesseractjs</a></li>
-  <li>Materiial Ui</li>
+  <li><a target="_blank" rel="noopener noreferrer" href="https://tesseract.projectnaptha.com/">Tesseractjs</a></li>
+  <li><a target="_blank" rel="noopener noreferrer" href="https://material-ui.com/">Material Ui</a></li>
   <li>Python</li>
   <li>Mongodb</li>
 </ul>
